@@ -2,9 +2,10 @@
 
 ## Analysis report
 
-Copyright (c) 2026
+Copyright (c) 2026 Tiffany A. Timbers, Joel Ostblom, Melissa Lee, Daniel Chen, Kehan Sky Sheng
 
-This report (source contained in the [`DSCI_522_project-template-breast-cancer-predictor` repository](https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor)) is made available under the **Attribution-NonCommercial-ShareAlike 4.0 International** ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)). 
+This report (source contained in the [`DSCI_522_project-template-breast-cancer-predictor` repository](https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor)) is made available under the **Attribution-NonCommercial-ShareAlike 4.0 International** ([CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)).
+It is adapted from the report in Tiffany A. Timbers' [`breast_cancer_predictor_py` repository](https://github.com/ttimbers/breast_cancer_predictor_py) (Copyright (c) 2023 Tiffany A. Timbers, CC BY-NC-SA 4.0).
 
 This is a human-readable summary of (and not a substitute for) the [license](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 
@@ -17,7 +18,7 @@ The licensor cannot revoke these freedoms as long as you follow the license term
 
 ## Under the following terms:
 
-- **Attribution** — You must give appropriate credit (mentioning that your work is derived from work that is Copyright © Tiffany A. Timbers, Trevor Campbell, Melissa Lee and, where practical, linking to https://datasciencebook.ca/), provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- **Attribution** — You must give appropriate credit (mentioning that your work is derived from work that is Copyright © Tiffany A. Timbers, Joel Ostblom, Melissa Lee, Daniel Chen, Kehan Sky Sheng and, where practical, linking to https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor), provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
 - **NonCommercial** — You may not use the material for commercial purposes.
 - **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
 
@@ -34,6 +35,13 @@ No warranties are given. The license may not give you all of the permissions nec
 MIT License
 
 Copyright (c) 2026 Tiffany A. Timbers, Joel Ostblom, Melissa Lee, Daniel Chen, Kehan Sky Sheng
+
+This code is adapted from:
+
+- Tiffany A. Timbers' [`breast_cancer_predictor_py` repository](https://github.com/ttimbers/breast_cancer_predictor_py),
+  Copyright (c) 2023 Tiffany A. Timbers, MIT License.
+- Daniel Chen's [`docker-uv-renv` repository](https://github.com/chendaniely/docker-uv-renv),
+  Copyright (c) 2026 Daniel Chen, MIT License.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

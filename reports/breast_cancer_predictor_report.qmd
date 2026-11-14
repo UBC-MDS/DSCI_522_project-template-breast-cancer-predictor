@@ -27,25 +27,23 @@ _ = alt.renderers.enable("png", scale_factor=2)
 
 # Summary
 
-Here we attempt to build a classification model using the k-nearest neighbours algorithm which can use breast cancer tumour image measurements to predict whether a newly discovered breast cancer tumour is benign (i.e., is not harmful and does not require treatment) or malignant (i.e., is harmful and requires treatment intervention). Our final classifier performed fairly well on an unseen test data set, with the F2 score, where beta = 2, of 0.96 and an overall accuracy calculated to be 0.98. On the 171 test data cases, it correctly predicted 168. It incorrectly predicted 3 cases, which were all false negatives: predicting that a tumour is benign when in fact it is malignant. This kind of incorrect prediction is the most harmful one in our context, because a patient with a malignant tumour could be sent home without the follow-up testing and treatment they need. As such, although the model performs well overall, we do not believe it is ready to be used in the clinic as a screening tool. Further research to reduce false negatives and to understand the characteristics of incorrectly predicted patients is needed first.
+Here we attempt to build a classification model using the k-nearest neighbours (k-NN) algorithm which can use breast cancer tumour image measurements to predict whether a newly discovered breast cancer tumour is benign (i.e., is not harmful and does not require treatment) or malignant (i.e., is harmful and requires treatment intervention). Our final classifier performed fairly well on an unseen test data set, with an F2 score (beta = 2) of 0.96 and an overall accuracy of 0.98. On the 171 test data cases, it correctly predicted 168. It incorrectly predicted 3 cases, which were all false negatives: predicting that a tumour is benign when in fact it is malignant. This kind of incorrect prediction is the most harmful one in our context, because a patient with a malignant tumour could be sent home without the follow-up testing and treatment they need. As such, although the model performs well overall, we do not believe it is ready to be used in the clinic as a screening tool. Further research to reduce false negatives and to understand the characteristics of incorrectly predicted patients is needed first.
 
 # Introduction
 
-Women have a 12.1% lifetime probability of developing breast cancer, and although cancer treatment has improved over the last 30 years, the projected death rate for women's breast cancer is 22.4 deaths per 100,000 in 2019 (Canadian Cancer Statistics Advisory Committee 2019). Early detection has been shown to improve outcomes (Canadian Cancer Statistics Advisory Committee 2019), and thus methods, assays and technologies that help to improve diagnosis may be beneficial for improving outcomes further. 
+Women have a 12.1% lifetime probability of developing breast cancer, and although cancer treatment has improved over the last 30 years, the projected death rate for women's breast cancer is 22.4 deaths per 100,000 in 2019 (Canadian Cancer Statistics Advisory Committee 2019). Early detection has been shown to improve outcomes (Canadian Cancer Statistics Advisory Committee 2019), and thus methods, assays and technologies that help to improve diagnosis may be beneficial for improving outcomes further.
 
 Here we ask if we can use a machine learning algorithm to predict whether a newly discovered tumour is benign or malignant given tumour image measurements. Answering this question is important because traditional methods for tumour diagnosis are quite subjective and can depend on the diagnosing physician's skill as well as experience (Street, Wolberg, and Mangasarian 1993). Furthermore, benign tumours are not normally dangerous; the cells stay in the same place and the tumour stops growing before it gets very large. By contrast, in malignant tumours, the cells invade the surrounding tissue and spread into nearby organs where they can cause serious damage. Thus, if a machine learning algorithm can accurately and effectively predict whether a newly discovered tumour is benign or malignant given tumour image measurements this could lead to less subjective, and more scalable breast cancer tumour diagnosis which could contribute to better patient outcomes.
+
+To answer this question, we use the Breast Cancer Wisconsin (Diagnostic) data set (Street, Wolberg, and Mangasarian 1993; Dua and Graff 2017). It contains 569 tumour samples, each described by 30 numeric features computed from a digitized image of a fine needle aspirate of a breast mass. These features are the mean, standard error and maximum of 10 measurements of the cell nuclei in the image (e.g., radius, texture, perimeter, area). The target we want to predict is the diagnosis of each tumour, benign or malignant, as determined by physicians.
 
 # Methods
 
 ## Data
-The data set used in this project is of digitized breast cancer image features created by Dr. William H. Wolberg, W. Nick Street, and Olvi L. Mangasarian at the University of Wisconsin, Madison (Street, Wolberg, and Mangasarian 1993).  It was sourced from the UCI Machine Learning Repository (Dua and Graff 2017) and can be found [here](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)). Each row in the data set represents summary statistics from measurements of an image of a tumour sample, including the diagnosis (benign or malignant) and several other measurements (e.g., nucleus texture, perimeter, area, etc.). Diagnosis for each image was conducted by physicians. 
 
-## Analysis
-The k-nearest neighbors (k-nn) algorithm was used to build a classification model to predict whether a tumour mass was benign or malignant (found in the class column of the data set). All variables included in the original data set, with the exception of the standard error of fractal dimension, smoothness, symmetry and texture were used to fit the model. Data was split with 70% being partitioned into the training set and 30% being partitioned into the test set. The hyperparameter $K$ was chosen using 30-fold cross validation with the F2 score as the classification metric. Beta was chosen to be set to 2 for the F2 score to increase the weight on recall during fitting because the application is cancer screening and false negatives are very undesirable in such an application. All variables were standardized just prior to model fitting. The Python programming language (Van Rossum and Drake 2009) and the following Python packages were used to perform the analysis: requests(Reitz 2011), zipfile (Van Rossum and Drake 2009), numpy(Harris et al. 2020), Pandas (McKinney 2010), altair (VanderPlas, 2018), scikit-learn (Pedregosa et al. 2011). The code used to perform the analysis and create this report can be found here: https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor.
+The data set used in this project is of digitized breast cancer image features created by Dr. William H. Wolberg, W. Nick Street, and Olvi L. Mangasarian at the University of Wisconsin, Madison (Street, Wolberg, and Mangasarian 1993). It was sourced from the UCI Machine Learning Repository (Dua and Graff 2017) and can be found [here](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)). Each row in the data set represents summary statistics from measurements of an image of a tumour sample, including the diagnosis (benign or malignant) and several other measurements (e.g., nucleus texture, perimeter, area, etc.). Diagnosis for each image was conducted by physicians.
 
-# Results & Discussion
-
-To look at whether each of the predictors might be useful to predict the tumour class, we plotted the distributions of each predictor from the training data set and coloured the distribution by class (benign: blue and malignant: orange). In doing this we see that class distributions for all of the mean and max predictors for all the measurements overlap somewhat, but do show quite a difference in their centres and spreads. This is less so for the standard error (se) predictors. In particular, the standard errors of fractal dimension, smoothness, symmetry and texture look very similar in both the distribution centre and spread. Thus, we choose to omit these from our model.
+We download the data with code below. The file we download is the archive of the related "Breast Cancer Wisconsin (Original)" entry in the UCI Machine Learning Repository, which bundles several Wisconsin breast cancer data sets together. We only use one file from it, `wdbc.data`, which is the Diagnostic data set described above. The other files in the archive are saved in `data/raw/` but are not used in this analysis.
 
 ```{python}
 # create the data folders if they don't exist
@@ -54,6 +52,8 @@ os.makedirs("../data/raw", exist_ok=True)
 os.makedirs("../data/processed", exist_ok=True)
 
 # download data as zip and extract
+# this archive (UCI "Breast Cancer Wisconsin (Original)") also contains
+# wdbc.data, the Breast Cancer Wisconsin (Diagnostic) data we use below
 url ="https://archive.ics.uci.edu/static/public/15/breast+cancer+wisconsin+original.zip"
 
 request = requests.get(url)
@@ -65,14 +65,13 @@ with zipfile.ZipFile("../data/raw/breast+cancer+wisconsin+original.zip", 'r') as
 ```
 
 ```{python}
-# pre-process data (e.g., scale and split into train & test)
 # read in data
 colnames = [
     "id",
     "class",
     "mean_radius",
     "mean_texture",
-    "mean_perimeter", 
+    "mean_perimeter",
     "mean_area",
     "mean_smoothness",
     "mean_compactness",
@@ -82,7 +81,7 @@ colnames = [
     "mean_fractal_dimension",
     "se_radius",
     "se_texture",
-    "se_perimeter", 
+    "se_perimeter",
     "se_area",
     "se_smoothness",
     "se_compactness",
@@ -92,7 +91,7 @@ colnames = [
     "se_fractal_dimension",
     "max_radius",
     "max_texture",
-    "max_perimeter", 
+    "max_perimeter",
     "max_area",
     "max_smoothness",
     "max_compactness",
@@ -110,13 +109,16 @@ cancer['class'] = cancer['class'].replace({
 })
 ```
 
+## Analysis
+
+The k-nearest neighbours (k-NN) algorithm was used to build a classification model to predict whether a tumour mass was benign or malignant (found in the class column of the data set). All variables included in the original data set, with the exception of the standard error of fractal dimension, smoothness, symmetry and texture were used to fit the model. Data was split with 70% being partitioned into the training set and 30% being partitioned into the test set. The hyperparameter K (the number of nearest neighbours) was chosen using 30-fold cross validation with the F2 score as the classification metric. Beta was set to 2 for the F2 score so that recall is weighted more heavily than precision when choosing K during hyperparameter tuning, because the application is cancer screening and false negatives are very undesirable in such an application. All variables were standardized just prior to model fitting. The Python programming language (Van Rossum and Drake 2009) and the following Python packages were used to perform the analysis: requests (Reitz 2011), zipfile (Van Rossum and Drake 2009), NumPy (Harris et al. 2020), pandas (McKinney 2010), Altair (VanderPlas et al. 2018) and scikit-learn (Pedregosa et al. 2011). The code used to perform the analysis and create this report can be found here: <https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor>.
+
 ```{python}
-np.random.seed(522)
 set_config(transform_output="pandas")
 
-# create the split
+# split the data into training (70%) and test (30%) sets
 cancer_train, cancer_test = train_test_split(
-    cancer, train_size=0.70, stratify=cancer["class"]
+    cancer, train_size=0.70, stratify=cancer["class"], random_state=522
 )
 
 cancer_train.to_csv("../data/processed/cancer_train.csv")
@@ -124,6 +126,8 @@ cancer_test.to_csv("../data/processed/cancer_test.csv")
 ```
 
 ```{python}
+# scale the numeric features, using means and standard deviations
+# learned from the training data only
 cancer_preprocessor = make_column_transformer(
     (StandardScaler(), make_column_selector(dtype_include='number')),
     remainder='passthrough',
@@ -138,8 +142,12 @@ scaled_cancer_train.to_csv("../data/processed/scaled_cancer_train.csv")
 scaled_cancer_test.to_csv("../data/processed/scaled_cancer_test.csv")
 ```
 
+# Results & Discussion
+
+To look at whether each of the predictors might be useful to predict the tumour class, we plotted the distributions of each predictor from the training data set and coloured the distribution by class (benign: blue and malignant: orange). In doing this we see that class distributions for all of the mean and max predictors for all the measurements overlap somewhat, but do show quite a difference in their centres and spreads. This is less so for the standard error (se) predictors. In particular, the standard errors of fractal dimension, smoothness, symmetry and texture look very similar in both the distribution centre and spread. Thus, we choose to omit these from our model.
+
 ```{python}
-# melt for plotting via facets 
+# melt for plotting via facets
 cancer_train_melted = scaled_cancer_train.melt(
     id_vars=['class'],
     var_name='predictor',
@@ -172,14 +180,14 @@ alt.Chart(cancer_train_melted, width=150, height=100).transform_density(
 Figure 1. Comparison of the empirical distributions of training data predictors between benign and malignant tumour masses.
 
 ```{python}
-# drop se_smoothness, se_symmetry, se_texture
+# drop se_smoothness, se_symmetry, se_texture, se_fractal_dimension
 cancer_train = cancer_train.drop(columns=["se_smoothness", "se_symmetry", "se_texture", "se_fractal_dimension"])
 ```
 
-We chose to use a simple classification model using the k-nearest neighbours algorithm. To find the model that best predicted whether a tumour was benign or malignant, we performed 30-fold cross validation using F2 score (beta = 2) as our metric of model prediction performance to select K (number of nearest neighbours). We observed that the optimal K was 4.
+We chose to use a simple classification model using the k-NN algorithm. To find the model that best predicted whether a tumour was benign or malignant, we performed 30-fold cross validation using F2 score (beta = 2) as our metric of model prediction performance to select K (number of nearest neighbours). We observed that the optimal K was 4.
 
 ```{python}
-# tune model (here, find K for k-nn using 30 fold cv)
+# tune model (here, find K for k-NN using 30 fold cv)
 knn = KNeighborsClassifier()
 cancer_tune_pipe = make_pipeline(cancer_preprocessor, knn)
 
@@ -216,7 +224,7 @@ accuracies_grid = (
     ]]
     .assign(
         sem_test_score=accuracies_grid["std_test_score"] / cv**(1/2),
-        # `lambda` allows access to the chained dataframe so that we can use the newly created `sem_test_score` column 
+        # `lambda` allows access to the chained dataframe so that we can use the newly created `sem_test_score` column
         sem_test_score_lower=lambda df: df["mean_test_score"] - (df["sem_test_score"]/2),
         sem_test_score_upper=lambda df: df["mean_test_score"] + (df["sem_test_score"]/2)
     )
@@ -224,21 +232,34 @@ accuracies_grid = (
     .drop(columns=["std_test_score"])
 )
 
-accuracies_grid.sort_values("mean_test_score", ascending=False).head(10)
+# readable column names for the report, with K as the row label
+(
+    accuracies_grid
+    .sort_values("mean_test_score", ascending=False)
+    .head(10)
+    .rename(columns={
+        "n_neighbors": "Number of neighbours (K)",
+        "mean_test_score": "Mean F2 score",
+        "sem_test_score": "Standard error",
+        "sem_test_score_lower": "Error bar lower bound",
+        "sem_test_score_upper": "Error bar upper bound"
+    })
+    .set_index("Number of neighbours (K)")
+)
 ```
 
 ```{python}
 line_n_point = alt.Chart(accuracies_grid, width=600).mark_line(color="black").encode(
-    x=alt.X("n_neighbors").title("Neighbors"),
+    x=alt.X("n_neighbors").title("Number of neighbours (K)"),
     y=alt.Y("mean_test_score")
-        .scale(zero=False) 
+        .scale(zero=False)
         .title("F2 score (beta = 2)")
 )
 
 error_bar = alt.Chart(accuracies_grid).mark_errorbar().encode(
     alt.Y("sem_test_score_upper:Q").scale(zero=False).title("F2 score (beta = 2)"),
     alt.Y2("sem_test_score_lower:Q"),
-    alt.X("n_neighbors:Q").title("Neighbors")
+    alt.X("n_neighbors:Q").title("Number of neighbours (K)")
 )
 
 line_n_point + line_n_point.mark_circle(color='black') + error_bar
@@ -269,39 +290,45 @@ f2_beta_2_score = fbeta_score(
     pos_label='Malignant'
 )
 
-pd.DataFrame({'accuracy': [accuracy], 'F2 score (beta = 2)': [f2_beta_2_score]})
+pd.DataFrame(
+    {'Accuracy': [accuracy], 'F2 score (beta = 2)': [f2_beta_2_score]},
+    index=['Test set']
+)
 ```
 
 Our prediction model performed quite well on test data, with a final overall accuracy of 0.98 and F2 (beta = 2) score of 0.96 (Table 2). The confusion matrix (Table 3) shows that the model only made 3 mistakes. However, all 3 mistakes were predicting a malignant tumour as benign. These false negatives are the most harmful kind of mistake for implementing this in the clinic, because they could delay treatment for patients who need it.
 
-Table 3. Confusion matrix of model performance on test data.
+Table 3. Confusion matrix of model performance on test data. Rows are the true diagnosis and columns are the diagnosis predicted by the model.
 
 ```{python}
 pd.crosstab(
     cancer_preds["class"],
     cancer_preds["predicted"],
+    rownames=["True diagnosis"],
+    colnames=["Predicted diagnosis"]
 )
 ```
 
-While the overall performance of this model is promising, the false negatives mean it is not yet ready to be used as a screening tool in a clinical setting, and there are several directions that could be explored to improve it further. First, we could look closely at the 3 misclassified observations and compare them to several observations that were classified correctly (from both classes). The goal of this would be to see which feature(s) may be driving the misclassification and explore whether any feature engineering could be used to help the model better predict on observations that it currently is making mistakes on. Additionally, we would try seeing whether we can get improved predictions using other classifiers. One classifier we might try is random forest because it automatically allows for feature interaction, where k-nn does not. Finally, we also might improve the usability of the model in the clinic if we output and report the probability estimates for predictions. If we cannot prevent misclassifications through the approaches suggested above, at least reporting a probability estimates for predictions would allow the clinician to know how confident the model was in its prediction. Thus the clinician may then have the ability to perform additional diagnostic assays if the probability estimates for prediction of a given tumour class is not very high.
+While the overall performance of this model is promising, the false negatives mean it is not yet ready to be used as a screening tool in a clinical setting, and there are several directions that could be explored to improve it further. First, we could look closely at the 3 misclassified observations and compare them to several observations that were classified correctly (from both classes). The goal of this would be to see which feature(s) may be driving the misclassification and explore whether any feature engineering could be used to help the model better predict on observations that it currently is making mistakes on. Additionally, we would try seeing whether we can get improved predictions using other classifiers. One classifier we might try is random forest because it automatically allows for feature interaction, where k-NN does not. Finally, we also might improve the usability of the model in the clinic if we output and report the probability estimates for predictions. If we cannot prevent misclassifications through the approaches suggested above, at least reporting probability estimates for predictions would allow the clinician to know how confident the model was in its prediction. Thus the clinician may then have the ability to perform additional diagnostic assays if the probability estimates for prediction of a given tumour class is not very high.
+
+These results should also be read with some limitations in mind. The data set is small (569 tumour samples), and all samples come from a single institution (the University of Wisconsin) and were collected in the early 1990s (Street, Wolberg, and Mangasarian 1993). Imaging equipment, patient populations and diagnostic practices may differ in other clinics and today, so the model may not perform as well on new data from elsewhere. Our estimate of test performance also comes from a single 70/30 train/test split; a different random split could give somewhat different numbers. Finally, the test set contains only 171 tumours, so the 3 false negatives we observed give a very uncertain estimate of how often the model would miss a malignant tumour in practice. A larger, more diverse test set would be needed to estimate the false negative rate with confidence.
 
 # References
 
-Canadian Cancer Statistics Advisory Committee. 2019. “Canadian Cancer Statistics.” Canadian Cancer Society. http://cancer.ca/Canadian-Cancer-Statistics-2019-EN.
+Canadian Cancer Statistics Advisory Committee. 2019. "Canadian Cancer Statistics 2019." Canadian Cancer Society. http://cancer.ca/Canadian-Cancer-Statistics-2019-EN.
 
-Dua, Dheeru, and Casey Graff. 2017. “UCI Machine Learning Repository.” University of California, Irvine, School of Information; Computer Sciences. http://archive.ics.uci.edu/ml.
+Dua, Dheeru, and Casey Graff. 2017. "UCI Machine Learning Repository." University of California, Irvine, School of Information and Computer Sciences. http://archive.ics.uci.edu/ml.
 
-Harris, C.R. et al., 2020. Array programming with NumPy. Nature, 585, pp.357–362.
+Harris, Charles R., K. Jarrod Millman, Stéfan J. van der Walt, et al. 2020. "Array Programming with NumPy." *Nature* 585: 357–362. https://doi.org/10.1038/s41586-020-2649-2.
 
-McKinney, Wes. 2010. “Data Structures for Statistical Computing in Python.” In Proceedings of the 9th Python in Science Conference, edited by Stéfan van der Walt and Jarrod Millman, 51–56.
+McKinney, Wes. 2010. "Data Structures for Statistical Computing in Python." In *Proceedings of the 9th Python in Science Conference*, edited by Stéfan van der Walt and Jarrod Millman, 56–61. https://doi.org/10.25080/Majora-92bf1922-00a.
 
-Pedregosa, F. et al., 2011. Scikit-learn: Machine learning in Python. Journal of machine learning research, 12(Oct), pp.2825–2830.
+Pedregosa, Fabian, Gaël Varoquaux, Alexandre Gramfort, et al. 2011. "Scikit-learn: Machine Learning in Python." *Journal of Machine Learning Research* 12: 2825–2830.
 
-Reitz, Kenneth. 2011. Requests: HTTP for Humans. https://requests.readthedocs.io/en/master/.
+Reitz, Kenneth. 2011. "Requests: HTTP for Humans." https://requests.readthedocs.io/.
 
-Street, W. Nick, W. H. Wolberg, and O. L. Mangasarian. 1993. “Nuclear feature extraction for breast tumor diagnosis.” In Biomedical Image Processing and Biomedical Visualization, edited by Raj S. Acharya and Dmitry B. Goldgof, 1905:861–70. International Society for Optics; Photonics; SPIE. https://doi.org/10.1117/12.148698.
+Street, W. Nick, W. H. Wolberg, and O. L. Mangasarian. 1993. "Nuclear Feature Extraction for Breast Tumor Diagnosis." In *Biomedical Image Processing and Biomedical Visualization*, edited by Raj S. Acharya and Dmitry B. Goldgof, 1905: 861–870. International Society for Optics and Photonics; SPIE. https://doi.org/10.1117/12.148698.
 
-VanderPlas, J. et al., 2018. Altair: Interactive statistical visualizations for python. Journal of open source software, 3(32), p.1057.
+Van Rossum, Guido, and Fred L. Drake. 2009. *Python 3 Reference Manual*. Scotts Valley, CA: CreateSpace.
 
-Van Rossum, Guido, and Fred L. Drake. 2009. Python 3 Reference Manual. Scotts Valley, CA: CreateSpace.
-
+VanderPlas, Jacob, Brian E. Granger, Jeffrey Heer, et al. 2018. "Altair: Interactive Statistical Visualizations for Python." *Journal of Open Source Software* 3 (32): 1057. https://doi.org/10.21105/joss.01057.

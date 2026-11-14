@@ -9,8 +9,6 @@ format:
     toc: true
   # PDF via Typst, which comes with Quarto
   typst:
-    # same citation style as the HTML (instead of Typst's own)
-    citeproc: true
     # png figures for the PDF
     fig-format: png
     # shrink figures and tables to fit the page
