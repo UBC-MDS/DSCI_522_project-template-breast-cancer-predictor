@@ -75,6 +75,16 @@ The rendered report is written to
 - Python and packages listed in [`pyproject.toml`](pyproject.toml)
   (exact versions are locked in [`uv.lock`](uv.lock))
 
+## AI use statement
+
+We used [Claude Code](https://claude.com/claude-code) to help adapt this
+project from conda and Jupyter to uv and Quarto.
+All AI-generated changes were reviewed, tested, and edited by the authors,
+who take full responsibility for the content of this repository.
+
+Our instructions for the AI assistant are in [`CLAUDE.md`](CLAUDE.md). Asking the assistant to act as a tutor rather than do the work:
+to guide us step by step, explain why, and critique our work honestly.
+
 ## License
 
 The Breast Cancer Predictor report contained herein is licensed under the
