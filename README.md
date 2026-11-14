@@ -1,8 +1,8 @@
 # Breast Cancer Predictor
 
-**Authors:** Tiffany Timbers, Melissa Lee, Joel Ostblom Daniel Chen & Kehan Sky Sheng
+**Authors:** Tiffany Timbers, Melissa Lee, Joel Ostblom, Daniel Chen & Kehan Sky Sheng
 
-Demo of a data analysis project for DSCI 522 (Data Science workflows); a
+Demo of a data analysis project for DSCI 522 (Reproducible and Trustworthy Data Science Workflows); a
 course in the Master of Data Science program at the University of
 British Columbia.
 
@@ -49,7 +49,14 @@ The final report can be found
 First time running the project,
 install [uv](https://docs.astral.sh/uv/getting-started/installation/)
 and [Quarto](https://quarto.org/docs/get-started/),
-then run the following from the root of this repository
+then clone this repository and move into it:
+
+``` bash
+git clone https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor.git
+cd DSCI_522_project-template-breast-cancer-predictor
+```
+
+Then run the following from the root of this repository
 to create the virtual environment:
 
 ``` bash
@@ -63,9 +70,14 @@ run the following from the root of this repository:
 uv run quarto render
 ```
 
+Rendering runs the whole analysis from scratch:
+it downloads the data again from the UCI Machine Learning Repository
+(so you need an internet connection),
+and overwrites the files in `data/raw/` and `data/processed/`.
 The rendered report is written to
 `reports/breast_cancer_predictor_report.html` and
-`reports/breast_cancer_predictor_report.pdf`.
+`reports/breast_cancer_predictor_report.pdf`,
+replacing the versions in this repository.
 
 ## Dependencies
 
