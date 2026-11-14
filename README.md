@@ -15,14 +15,14 @@ measurements to predict whether a newly discovered breast cancer tumour
 is benign (i.e., is not harmful and does not require treatment) or
 malignant (i.e., is harmful and requires treatment intervention).
 Our final classifier performed fairly well on an unseen test data set,
-with F2 = 0.98
-and an overall accuracy calculated to be 0.96. On the 171 test data cases,
+with an F2 score (beta = 2) of 0.96
+and an overall accuracy of 0.96. Of the 171 test data cases,
 it correctly predicted 168.
 It incorrectly predicted 3 cases,
-however these were false positives, predicting that a tumour is malignant
-when in fact it is benign.
-These kind of incorrect predictions could cause the patient
-to undergo unnecessary treatment,
+and all of these were false negatives: predicting that a tumour is benign
+when in fact it is malignant.
+This kind of incorrect prediction is the most harmful in this context,
+because it could delay treatment for a patient who needs it,
 and as such we recommend further research to improve the model
 before it is ready to be put into production in the clinic.
 
@@ -31,9 +31,7 @@ image features created by Dr. William H. Wolberg, W. Nick Street, and
 Olvi L. Mangasarian at the University of Wisconsin, Madison (Street,
 Wolberg, and Mangasarian 1993). It was sourced from the UCI Machine
 Learning Repository (Dua and Graff 2017) and can be found
-[here](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+\(Diagnostic\)),
-specifically [this
-file](http://mlr.cs.umass.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data).
+[here](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+\(Diagnostic\)).
 Each row in the data set represents summary statistics from measurements
 of an image of a tumour sample, including the diagnosis (benign or
 malignant) and several other measurements (e.g., nucleus texture,
