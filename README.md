@@ -1,6 +1,6 @@
 # Breast Cancer Predictor
 
-  - author: Tiffany Timbers, Melissa Lee & Joel Ostblom Daniel Chen & Kehan Sky Sheng
+**Authors:** Tiffany Timbers, Melissa Lee & Joel Ostblom Daniel Chen & Kehan Sky Sheng
 
 Demo of a data analysis project for DSCI 522 (Data Science workflows); a
 course in the Master of Data Science program at the University of
