@@ -225,8 +225,8 @@ accuracies_grid = (
     .assign(
         sem_test_score=accuracies_grid["std_test_score"] / cv**(1/2),
         # `lambda` allows access to the chained dataframe so that we can use the newly created `sem_test_score` column
-        sem_test_score_lower=lambda df: df["mean_test_score"] - (df["sem_test_score"]/2),
-        sem_test_score_upper=lambda df: df["mean_test_score"] + (df["sem_test_score"]/2)
+        sem_test_score_lower=lambda df: df["mean_test_score"] - df["sem_test_score"],
+        sem_test_score_upper=lambda df: df["mean_test_score"] + df["sem_test_score"]
     )
     .rename(columns={"param_kneighborsclassifier__n_neighbors": "n_neighbors"})
     .drop(columns=["std_test_score"])
@@ -265,7 +265,7 @@ error_bar = alt.Chart(accuracies_grid).mark_errorbar().encode(
 line_n_point + line_n_point.mark_circle(color='black') + error_bar
 ```
 
-Figure 2. Results from 30-fold cross validation to choose K. F2 score (with beta = 2) was used as the classification metric as K was varied.
+Figure 2. Results from 30-fold cross validation to choose K. F2 score (with beta = 2) was used as the classification metric as K was varied. Points show the mean F2 score across the 30 folds, and error bars show plus and minus one standard error of the mean.
 
 Table 2. Accuracy and F2 score (beta = 2) of the final model on the test data.
 
