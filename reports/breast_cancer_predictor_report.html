@@ -2412,7 +2412,7 @@ window.Quarto = {
 </header>
 
 
-<div id="421e9497" class="cell" data-execution_count="1">
+<div id="6cbad3f7" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2426,14 +2426,14 @@ window.Quarto = {
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> KNeighborsClassifier</span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> GridSearchCV</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> fbeta_score, make_scorer</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> fbeta_score, make_scorer, accuracy_score</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># png, so the charts also show in the PDF</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> alt.renderers.enable(<span class="st">&quot;png&quot;</span>, scale_factor<span class="op">=</span><span class="dv">2</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="summary" class="level1">
 <h1>Summary</h1>
-<p>Here we attempt to build a classification model using the k-nearest neighbours algorithm which can use breast cancer tumour image measurements to predict whether a newly discovered breast cancer tumour is benign (i.e., is not harmful and does not require treatment) or malignant (i.e., is harmful and requires treatment intervention). Our final classifier performed fairly well on an unseen test data set, with the F2 score, where beta = 2, of 0.96 and an overall accuracy calculated to be 0.96. On the 171 test data cases, it correctly predicted 168. It incorrectly predicted 3 cases, which were all false negatives: predicting that a tumour is benign when in fact it is malignant. This kind of incorrect prediction is the most harmful one in our context, because a patient with a malignant tumour could be sent home without the follow-up testing and treatment they need. As such, although the model performs well overall, we do not believe it is ready to be used in the clinic as a screening tool. Further research to reduce false negatives and to understand the characteristics of incorrectly predicted patients is needed first.</p>
+<p>Here we attempt to build a classification model using the k-nearest neighbours algorithm which can use breast cancer tumour image measurements to predict whether a newly discovered breast cancer tumour is benign (i.e., is not harmful and does not require treatment) or malignant (i.e., is harmful and requires treatment intervention). Our final classifier performed fairly well on an unseen test data set, with the F2 score, where beta = 2, of 0.96 and an overall accuracy calculated to be 0.98. On the 171 test data cases, it correctly predicted 168. It incorrectly predicted 3 cases, which were all false negatives: predicting that a tumour is benign when in fact it is malignant. This kind of incorrect prediction is the most harmful one in our context, because a patient with a malignant tumour could be sent home without the follow-up testing and treatment they need. As such, although the model performs well overall, we do not believe it is ready to be used in the clinic as a screening tool. Further research to reduce false negatives and to understand the characteristics of incorrectly predicted patients is needed first.</p>
 </section>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
@@ -2454,7 +2454,7 @@ window.Quarto = {
 <section id="results-discussion" class="level1">
 <h1>Results &amp; Discussion</h1>
 <p>To look at whether each of the predictors might be useful to predict the tumour class, we plotted the distributions of each predictor from the training data set and coloured the distribution by class (benign: blue and malignant: orange). In doing this we see that class distributions for all of the mean and max predictors for all the measurements overlap somewhat, but do show quite a difference in their centres and spreads. This is less so for the standard error (se) predictors. In particular, the standard errors of fractal dimension, smoothness, symmetry and texture look very similar in both the distribution centre and spread. Thus, we choose to omit these from our model.</p>
-<div id="ea097abc" class="cell" data-execution_count="2">
+<div id="fc690312" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create the data folders if they don&#39;t exist</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (git does not track empty folders)</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>os.makedirs(<span class="st">&quot;../data/raw&quot;</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
@@ -2470,7 +2470,7 @@ window.Quarto = {
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(<span class="st">&quot;../data/raw/breast+cancer+wisconsin+original.zip&quot;</span>, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> zip_ref:</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall(<span class="st">&quot;../data/raw&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="4de74287" class="cell" data-execution_count="3">
+<div id="620618b7" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pre-process data (e.g., scale and split into train &amp; test)</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># read in data</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>colnames <span class="op">=</span> [</span>
@@ -2513,312 +2513,9 @@ window.Quarto = {
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>cancer[<span class="st">&#39;class&#39;</span>] <span class="op">=</span> cancer[<span class="st">&#39;class&#39;</span>].replace({</span>
 <span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;M&#39;</span> : <span class="st">&#39;Malignant&#39;</span>,</span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;B&#39;</span> : <span class="st">&#39;Benign&#39;</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>cancer</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">class</th>
-<th data-quarto-table-cell-role="th">mean_radius</th>
-<th data-quarto-table-cell-role="th">mean_texture</th>
-<th data-quarto-table-cell-role="th">mean_perimeter</th>
-<th data-quarto-table-cell-role="th">mean_area</th>
-<th data-quarto-table-cell-role="th">mean_smoothness</th>
-<th data-quarto-table-cell-role="th">mean_compactness</th>
-<th data-quarto-table-cell-role="th">mean_concavity</th>
-<th data-quarto-table-cell-role="th">mean_concave_points</th>
-<th data-quarto-table-cell-role="th">mean_symmetry</th>
-<th data-quarto-table-cell-role="th">...</th>
-<th data-quarto-table-cell-role="th">max_radius</th>
-<th data-quarto-table-cell-role="th">max_texture</th>
-<th data-quarto-table-cell-role="th">max_perimeter</th>
-<th data-quarto-table-cell-role="th">max_area</th>
-<th data-quarto-table-cell-role="th">max_smoothness</th>
-<th data-quarto-table-cell-role="th">max_compactness</th>
-<th data-quarto-table-cell-role="th">max_concavity</th>
-<th data-quarto-table-cell-role="th">max_concave_points</th>
-<th data-quarto-table-cell-role="th">max_symmetry</th>
-<th data-quarto-table-cell-role="th">max_fractal_dimension</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">0</th>
-<td>Malignant</td>
-<td>17.99</td>
-<td>10.38</td>
-<td>122.80</td>
-<td>1001.0</td>
-<td>0.11840</td>
-<td>0.27760</td>
-<td>0.30010</td>
-<td>0.14710</td>
-<td>0.2419</td>
-<td>...</td>
-<td>25.380</td>
-<td>17.33</td>
-<td>184.60</td>
-<td>2019.0</td>
-<td>0.16220</td>
-<td>0.66560</td>
-<td>0.7119</td>
-<td>0.2654</td>
-<td>0.4601</td>
-<td>0.11890</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1</th>
-<td>Malignant</td>
-<td>20.57</td>
-<td>17.77</td>
-<td>132.90</td>
-<td>1326.0</td>
-<td>0.08474</td>
-<td>0.07864</td>
-<td>0.08690</td>
-<td>0.07017</td>
-<td>0.1812</td>
-<td>...</td>
-<td>24.990</td>
-<td>23.41</td>
-<td>158.80</td>
-<td>1956.0</td>
-<td>0.12380</td>
-<td>0.18660</td>
-<td>0.2416</td>
-<td>0.1860</td>
-<td>0.2750</td>
-<td>0.08902</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">2</th>
-<td>Malignant</td>
-<td>19.69</td>
-<td>21.25</td>
-<td>130.00</td>
-<td>1203.0</td>
-<td>0.10960</td>
-<td>0.15990</td>
-<td>0.19740</td>
-<td>0.12790</td>
-<td>0.2069</td>
-<td>...</td>
-<td>23.570</td>
-<td>25.53</td>
-<td>152.50</td>
-<td>1709.0</td>
-<td>0.14440</td>
-<td>0.42450</td>
-<td>0.4504</td>
-<td>0.2430</td>
-<td>0.3613</td>
-<td>0.08758</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">3</th>
-<td>Malignant</td>
-<td>11.42</td>
-<td>20.38</td>
-<td>77.58</td>
-<td>386.1</td>
-<td>0.14250</td>
-<td>0.28390</td>
-<td>0.24140</td>
-<td>0.10520</td>
-<td>0.2597</td>
-<td>...</td>
-<td>14.910</td>
-<td>26.50</td>
-<td>98.87</td>
-<td>567.7</td>
-<td>0.20980</td>
-<td>0.86630</td>
-<td>0.6869</td>
-<td>0.2575</td>
-<td>0.6638</td>
-<td>0.17300</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>Malignant</td>
-<td>20.29</td>
-<td>14.34</td>
-<td>135.10</td>
-<td>1297.0</td>
-<td>0.10030</td>
-<td>0.13280</td>
-<td>0.19800</td>
-<td>0.10430</td>
-<td>0.1809</td>
-<td>...</td>
-<td>22.540</td>
-<td>16.67</td>
-<td>152.20</td>
-<td>1575.0</td>
-<td>0.13740</td>
-<td>0.20500</td>
-<td>0.4000</td>
-<td>0.1625</td>
-<td>0.2364</td>
-<td>0.07678</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">...</th>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-<td>...</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">564</th>
-<td>Malignant</td>
-<td>21.56</td>
-<td>22.39</td>
-<td>142.00</td>
-<td>1479.0</td>
-<td>0.11100</td>
-<td>0.11590</td>
-<td>0.24390</td>
-<td>0.13890</td>
-<td>0.1726</td>
-<td>...</td>
-<td>25.450</td>
-<td>26.40</td>
-<td>166.10</td>
-<td>2027.0</td>
-<td>0.14100</td>
-<td>0.21130</td>
-<td>0.4107</td>
-<td>0.2216</td>
-<td>0.2060</td>
-<td>0.07115</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">565</th>
-<td>Malignant</td>
-<td>20.13</td>
-<td>28.25</td>
-<td>131.20</td>
-<td>1261.0</td>
-<td>0.09780</td>
-<td>0.10340</td>
-<td>0.14400</td>
-<td>0.09791</td>
-<td>0.1752</td>
-<td>...</td>
-<td>23.690</td>
-<td>38.25</td>
-<td>155.00</td>
-<td>1731.0</td>
-<td>0.11660</td>
-<td>0.19220</td>
-<td>0.3215</td>
-<td>0.1628</td>
-<td>0.2572</td>
-<td>0.06637</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">566</th>
-<td>Malignant</td>
-<td>16.60</td>
-<td>28.08</td>
-<td>108.30</td>
-<td>858.1</td>
-<td>0.08455</td>
-<td>0.10230</td>
-<td>0.09251</td>
-<td>0.05302</td>
-<td>0.1590</td>
-<td>...</td>
-<td>18.980</td>
-<td>34.12</td>
-<td>126.70</td>
-<td>1124.0</td>
-<td>0.11390</td>
-<td>0.30940</td>
-<td>0.3403</td>
-<td>0.1418</td>
-<td>0.2218</td>
-<td>0.07820</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">567</th>
-<td>Malignant</td>
-<td>20.60</td>
-<td>29.33</td>
-<td>140.10</td>
-<td>1265.0</td>
-<td>0.11780</td>
-<td>0.27700</td>
-<td>0.35140</td>
-<td>0.15200</td>
-<td>0.2397</td>
-<td>...</td>
-<td>25.740</td>
-<td>39.42</td>
-<td>184.60</td>
-<td>1821.0</td>
-<td>0.16500</td>
-<td>0.86810</td>
-<td>0.9387</td>
-<td>0.2650</td>
-<td>0.4087</td>
-<td>0.12400</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">568</th>
-<td>Benign</td>
-<td>7.76</td>
-<td>24.54</td>
-<td>47.92</td>
-<td>181.0</td>
-<td>0.05263</td>
-<td>0.04362</td>
-<td>0.00000</td>
-<td>0.00000</td>
-<td>0.1587</td>
-<td>...</td>
-<td>9.456</td>
-<td>30.37</td>
-<td>59.16</td>
-<td>268.6</td>
-<td>0.08996</td>
-<td>0.06444</td>
-<td>0.0000</td>
-<td>0.0000</td>
-<td>0.2871</td>
-<td>0.07039</td>
-</tr>
-</tbody>
-</table>
-
-<p>569 rows × 31 columns</p>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
-</div>
-<div id="82f5f501" class="cell" data-execution_count="4">
+<div id="59f902b5" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">522</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>set_config(transform_output<span class="op">=</span><span class="st">&quot;pandas&quot;</span>)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2830,7 +2527,7 @@ window.Quarto = {
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>cancer_train.to_csv(<span class="st">&quot;../data/processed/cancer_train.csv&quot;</span>)</span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>cancer_test.to_csv(<span class="st">&quot;../data/processed/cancer_test.csv&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="bc59b75a" class="cell" data-execution_count="5">
+<div id="92cdb542" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cancer_preprocessor <span class="op">=</span> make_column_transformer(</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    (StandardScaler(), make_column_selector(dtype_include<span class="op">=</span><span class="st">&#39;number&#39;</span>)),</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span><span class="st">&#39;passthrough&#39;</span>,</span>
@@ -2844,7 +2541,7 @@ window.Quarto = {
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>scaled_cancer_train.to_csv(<span class="st">&quot;../data/processed/scaled_cancer_train.csv&quot;</span>)</span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>scaled_cancer_test.to_csv(<span class="st">&quot;../data/processed/scaled_cancer_test.csv&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="aa863519" class="cell" data-execution_count="6">
+<div id="abcbd7d0" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># melt for plotting via facets </span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cancer_train_melted <span class="op">=</span> scaled_cancer_train.melt(</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    id_vars<span class="op">=</span>[<span class="st">&#39;class&#39;</span>],</span>
@@ -2855,7 +2552,7 @@ window.Quarto = {
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># make columns names nicer for plotting</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>cancer_train_melted[<span class="st">&#39;predictor&#39;</span>] <span class="op">=</span> cancer_train_melted[<span class="st">&#39;predictor&#39;</span>].<span class="bu">str</span>.replace(<span class="st">&#39;_&#39;</span>,<span class="st">&#39; &#39;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="372aa5e8" class="cell" data-execution_count="7">
+<div id="39d04f40" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exploratory data analysis - visualize predictor distributions across classes</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>alt.data_transformers.enable(<span class="st">&#39;vegafusion&#39;</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2881,12 +2578,12 @@ window.Quarto = {
 </div>
 </div>
 <p>Figure 1. Comparison of the empirical distributions of training data predictors between benign and malignant tumour masses.</p>
-<div id="e9a93cb1" class="cell" data-execution_count="8">
+<div id="b293541c" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># drop se_smoothness, se_symmetry, se_texture</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cancer_train <span class="op">=</span> cancer_train.drop(columns<span class="op">=</span>[<span class="st">&quot;se_smoothness&quot;</span>, <span class="st">&quot;se_symmetry&quot;</span>, <span class="st">&quot;se_texture&quot;</span>, <span class="st">&quot;se_fractal_dimension&quot;</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We chose to use a simple classification model using the k-nearest neighbours algorithm. To find the model that best predicted whether a tumour was benign or malignant, we performed 30-fold cross validation using F2 score (beta = 2) as our metric of model prediction performance to select K (number of nearest neighbours). We observed that the optimal K was 4.</p>
-<div id="48b89c77" class="cell" data-execution_count="9">
+<div id="4ed77a31" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tune model (here, find K for k-nn using 30 fold cv)</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>cancer_tune_pipe <span class="op">=</span> make_pipeline(cancer_preprocessor, knn)</span>
@@ -2903,7 +2600,7 @@ window.Quarto = {
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    scoring<span class="op">=</span>make_scorer(fbeta_score, pos_label<span class="op">=</span><span class="st">&#39;Malignant&#39;</span>, beta<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="fc183b24" class="cell" data-execution_count="10">
+<div id="83ff6dd7" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cancer_fit <span class="op">=</span> cancer_tune_grid.fit(</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    cancer_train.drop(columns<span class="op">=</span>[<span class="st">&quot;class&quot;</span>]),</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    cancer_train[<span class="st">&quot;class&quot;</span>]</span>
@@ -2911,7 +2608,8 @@ window.Quarto = {
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>accuracies_grid <span class="op">=</span> pd.DataFrame(cancer_fit.cv_results_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="7f5cfb53" class="cell" data-execution_count="11">
+<p>Table 1. The 10 values of K with the highest mean F2 score (beta = 2) across the 30 cross-validation folds. The table shows the mean F2 score, its standard error, and the lower and upper bounds of the error bars plotted in Figure 2.</p>
+<div id="0281ad75" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>accuracies_grid <span class="op">=</span> (</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    accuracies_grid[[</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;param_kneighborsclassifier__n_neighbors&quot;</span>,</span>
@@ -3031,8 +2729,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Table 1. The 10 values of K with the highest mean F2 score (beta = 2) across the 30 cross-validation folds. The table shows the mean F2 score, its standard error, and the lower and upper bounds of the error bars plotted in Figure 2.</p>
-<div id="74f10686" class="cell" data-execution_count="12">
+<div id="fa48ff9c" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>line_n_point <span class="op">=</span> alt.Chart(accuracies_grid, width<span class="op">=</span><span class="dv">600</span>).mark_line(color<span class="op">=</span><span class="st">&quot;black&quot;</span>).encode(</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(<span class="st">&quot;n_neighbors&quot;</span>).title(<span class="st">&quot;Neighbors&quot;</span>),</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">&quot;mean_test_score&quot;</span>)</span>
@@ -3056,25 +2753,29 @@ window.Quarto = {
 </div>
 </div>
 <p>Figure 2. Results from 30-fold cross validation to choose K. F2 score (with beta = 2) was used as the classification metric as K was varied.</p>
-<div id="55483f22" class="cell" data-execution_count="13">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute accuracy</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> cancer_fit.score(</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    cancer_test.drop(columns<span class="op">=</span>[<span class="st">&quot;class&quot;</span>]),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    cancer_test[<span class="st">&quot;class&quot;</span>]</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute F2 score (beta = 2)</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>cancer_preds <span class="op">=</span> cancer_test.assign(</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    predicted<span class="op">=</span>cancer_fit.predict(cancer_test)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>f2_beta_2_score <span class="op">=</span> fbeta_score(</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&#39;class&#39;</span>],</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&#39;predicted&#39;</span>],</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">=</span><span class="dv">2</span>,</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    pos_label<span class="op">=</span><span class="st">&#39;Malignant&#39;</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({<span class="st">&#39;accuracy&#39;</span>: [accuracy], <span class="st">&#39;F2 score (beta = 2)&#39;</span>: [f2_beta_2_score]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Table 2. Accuracy and F2 score (beta = 2) of the final model on the test data.</p>
+<div id="c667c886" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict on the test data</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cancer_preds <span class="op">=</span> cancer_test.assign(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    predicted<span class="op">=</span>cancer_fit.predict(cancer_test)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute accuracy</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># (cancer_fit.score() would return the F2 score, the metric used for tuning)</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>accuracy <span class="op">=</span> accuracy_score(</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&#39;class&#39;</span>],</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&#39;predicted&#39;</span>]</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute F2 score (beta = 2)</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>f2_beta_2_score <span class="op">=</span> fbeta_score(</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&#39;class&#39;</span>],</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&#39;predicted&#39;</span>],</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    beta<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    pos_label<span class="op">=</span><span class="st">&#39;Malignant&#39;</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({<span class="st">&#39;accuracy&#39;</span>: [accuracy], <span class="st">&#39;F2 score (beta = 2)&#39;</span>: [f2_beta_2_score]})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
@@ -3090,7 +2791,7 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">0</th>
-<td>0.962145</td>
+<td>0.982456</td>
 <td>0.962145</td>
 </tr>
 </tbody>
@@ -3099,10 +2800,9 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>Table 2. Accuracy and F2 score (beta = 2) of the final model on the test data.</p>
-<p>Our prediction model performed quite well on test data, with a final overall accuracy of 0.96 and F2 (beta = 2) score of 0.96 (Table 2). The confusion matrix (Table 3) shows that the model only made 3 mistakes. However, all 3 mistakes were predicting a malignant tumour as benign. These false negatives are the most harmful kind of mistake for implementing this in the clinic, because they could delay treatment for patients who need it.</p>
+<p>Our prediction model performed quite well on test data, with a final overall accuracy of 0.98 and F2 (beta = 2) score of 0.96 (Table 2). The confusion matrix (Table 3) shows that the model only made 3 mistakes. However, all 3 mistakes were predicting a malignant tumour as benign. These false negatives are the most harmful kind of mistake for implementing this in the clinic, because they could delay treatment for patients who need it.</p>
 <p>Table 3. Confusion matrix of model performance on test data.</p>
-<div id="8866d7b5" class="cell" data-execution_count="14">
+<div id="ff24567e" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&quot;class&quot;</span>],</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&quot;predicted&quot;</span>],</span>

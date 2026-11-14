@@ -16,7 +16,7 @@ is benign (i.e., is not harmful and does not require treatment) or
 malignant (i.e., is harmful and requires treatment intervention).
 Our final classifier performed fairly well on an unseen test data set,
 with an F2 score (beta = 2) of 0.96
-and an overall accuracy of 0.96. Of the 171 test data cases,
+and an overall accuracy of 0.98. Of the 171 test data cases,
 it correctly predicted 168.
 It incorrectly predicted 3 cases,
 and all of these were false negatives: predicting that a tumour is benign

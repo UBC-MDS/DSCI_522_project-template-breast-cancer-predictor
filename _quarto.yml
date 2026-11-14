@@ -12,3 +12,9 @@ format:
     # png, not svg: R's svg figures need XQuartz on a Mac
     # not needed for local work, only CI
     fig-format: png
+    # shrink figures and tables to fit the page
+    # (Typst code below; `x => ...` is a function of x)
+    include-in-header:
+      text: |
+        #show image: it => layout(size => if it.width == auto or it.width <= size.width { it } else { image(it.source, width: size.width) })
+        #show table: set text(size: 9pt)

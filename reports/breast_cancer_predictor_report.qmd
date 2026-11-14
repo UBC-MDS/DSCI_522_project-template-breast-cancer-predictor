@@ -19,7 +19,7 @@ from sklearn.compose import make_column_transformer, make_column_selector
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import fbeta_score, make_scorer
+from sklearn.metrics import fbeta_score, make_scorer, accuracy_score
 
 # png, so the charts also show in the PDF
 _ = alt.renderers.enable("png", scale_factor=2)
@@ -27,7 +27,7 @@ _ = alt.renderers.enable("png", scale_factor=2)
 
 # Summary
 
-Here we attempt to build a classification model using the k-nearest neighbours algorithm which can use breast cancer tumour image measurements to predict whether a newly discovered breast cancer tumour is benign (i.e., is not harmful and does not require treatment) or malignant (i.e., is harmful and requires treatment intervention). Our final classifier performed fairly well on an unseen test data set, with the F2 score, where beta = 2, of 0.96 and an overall accuracy calculated to be 0.96. On the 171 test data cases, it correctly predicted 168. It incorrectly predicted 3 cases, which were all false negatives: predicting that a tumour is benign when in fact it is malignant. This kind of incorrect prediction is the most harmful one in our context, because a patient with a malignant tumour could be sent home without the follow-up testing and treatment they need. As such, although the model performs well overall, we do not believe it is ready to be used in the clinic as a screening tool. Further research to reduce false negatives and to understand the characteristics of incorrectly predicted patients is needed first.
+Here we attempt to build a classification model using the k-nearest neighbours algorithm which can use breast cancer tumour image measurements to predict whether a newly discovered breast cancer tumour is benign (i.e., is not harmful and does not require treatment) or malignant (i.e., is harmful and requires treatment intervention). Our final classifier performed fairly well on an unseen test data set, with the F2 score, where beta = 2, of 0.96 and an overall accuracy calculated to be 0.98. On the 171 test data cases, it correctly predicted 168. It incorrectly predicted 3 cases, which were all false negatives: predicting that a tumour is benign when in fact it is malignant. This kind of incorrect prediction is the most harmful one in our context, because a patient with a malignant tumour could be sent home without the follow-up testing and treatment they need. As such, although the model performs well overall, we do not believe it is ready to be used in the clinic as a screening tool. Further research to reduce false negatives and to understand the characteristics of incorrectly predicted patients is needed first.
 
 # Introduction
 
@@ -108,7 +108,6 @@ cancer['class'] = cancer['class'].replace({
     'M' : 'Malignant',
     'B' : 'Benign'
 })
-cancer
 ```
 
 ```{python}
@@ -206,6 +205,8 @@ cancer_fit = cancer_tune_grid.fit(
 accuracies_grid = pd.DataFrame(cancer_fit.cv_results_)
 ```
 
+Table 1. The 10 values of K with the highest mean F2 score (beta = 2) across the 30 cross-validation folds. The table shows the mean F2 score, its standard error, and the lower and upper bounds of the error bars plotted in Figure 2.
+
 ```{python}
 accuracies_grid = (
     accuracies_grid[[
@@ -226,8 +227,6 @@ accuracies_grid = (
 accuracies_grid.sort_values("mean_test_score", ascending=False).head(10)
 ```
 
-Table 1. The 10 values of K with the highest mean F2 score (beta = 2) across the 30 cross-validation folds. The table shows the mean F2 score, its standard error, and the lower and upper bounds of the error bars plotted in Figure 2.
-
 ```{python}
 line_n_point = alt.Chart(accuracies_grid, width=600).mark_line(color="black").encode(
     x=alt.X("n_neighbors").title("Neighbors"),
@@ -247,17 +246,22 @@ line_n_point + line_n_point.mark_circle(color='black') + error_bar
 
 Figure 2. Results from 30-fold cross validation to choose K. F2 score (with beta = 2) was used as the classification metric as K was varied.
 
-```{python}
-# Compute accuracy
-accuracy = cancer_fit.score(
-    cancer_test.drop(columns=["class"]),
-    cancer_test["class"]
-)
+Table 2. Accuracy and F2 score (beta = 2) of the final model on the test data.
 
-# Compute F2 score (beta = 2)
+```{python}
+# Predict on the test data
 cancer_preds = cancer_test.assign(
     predicted=cancer_fit.predict(cancer_test)
 )
+
+# Compute accuracy
+# (cancer_fit.score() would return the F2 score, the metric used for tuning)
+accuracy = accuracy_score(
+    cancer_preds['class'],
+    cancer_preds['predicted']
+)
+
+# Compute F2 score (beta = 2)
 f2_beta_2_score = fbeta_score(
     cancer_preds['class'],
     cancer_preds['predicted'],
@@ -268,9 +272,7 @@ f2_beta_2_score = fbeta_score(
 pd.DataFrame({'accuracy': [accuracy], 'F2 score (beta = 2)': [f2_beta_2_score]})
 ```
 
-Table 2. Accuracy and F2 score (beta = 2) of the final model on the test data.
-
-Our prediction model performed quite well on test data, with a final overall accuracy of 0.96 and F2 (beta = 2) score of 0.96 (Table 2). The confusion matrix (Table 3) shows that the model only made 3 mistakes. However, all 3 mistakes were predicting a malignant tumour as benign. These false negatives are the most harmful kind of mistake for implementing this in the clinic, because they could delay treatment for patients who need it.
+Our prediction model performed quite well on test data, with a final overall accuracy of 0.98 and F2 (beta = 2) score of 0.96 (Table 2). The confusion matrix (Table 3) shows that the model only made 3 mistakes. However, all 3 mistakes were predicting a malignant tumour as benign. These false negatives are the most harmful kind of mistake for implementing this in the clinic, because they could delay treatment for patients who need it.
 
 Table 3. Confusion matrix of model performance on test data.
 
