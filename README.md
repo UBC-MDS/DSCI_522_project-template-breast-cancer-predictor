@@ -76,7 +76,7 @@ The rendered report is written to
 
 ## AI use statement
 
-We used [Claude Code](https://claude.com/claude-code) to help adapt this
+We used Anthropic [Claude Code](https://claude.com/claude-code) Opus 5.5 to help adapt this
 project from conda and Jupyter to uv and Quarto.
 All AI-generated changes were reviewed, tested, and edited by the authors,
 who take full responsibility for the content of this repository.
