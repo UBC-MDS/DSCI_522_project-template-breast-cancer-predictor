@@ -6,7 +6,7 @@ services:
   analysis-env:
     # CHANGE THIS LINE: your image on Docker Hub,
     # with the sha- tag your workflow pushed (not latest)
-    image: skysheng7/breast-cancer-predictor-2026:sha-1a2b3c4
+    image: skysheng7/dsci_522_project-template-breast-cancer-predictor:sha-6ebd986
     ports:
       # 2222 on your computer, 22 (ssh) in the container
       - "2222:22"
