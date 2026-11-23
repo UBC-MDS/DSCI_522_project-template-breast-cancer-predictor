@@ -82,3 +82,35 @@ jobs:
             --tag "$IMAGE:sha-${GITHUB_SHA::7}" \
             "$IMAGE:sha-${GITHUB_SHA::7}-amd64" \
             "$IMAGE:sha-${GITHUB_SHA::7}-arm64"
+
+  # Job 3: write the new tag into docker-compose.yml and commit it
+  # to the branch you pushed, so your team only has to git pull
+  update-compose:
+    needs: combine
+    runs-on: ubuntu-latest
+    # lets this job push a commit to your repository
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      # Replace the image: line, e.g. image: yourname/your-repo:sha-1a2b3c4
+      # (skipped if you have no docker-compose.yml yet)
+      - name: Put the new tag in docker-compose.yml
+        if: hashFiles('docker-compose.yml') != ''
+        run: |
+          IMAGE=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')
+          sed -i "s|^\( *image:\).*|\1 $IMAGE:sha-${GITHUB_SHA::7}|" docker-compose.yml
+
+      # Commit and push the change (does nothing if the file didn't change)
+      - name: Commit and push docker-compose.yml
+        if: hashFiles('docker-compose.yml') != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docker-compose.yml
+          git diff --cached --quiet && exit 0
+          git commit -m "Use image tag sha-${GITHUB_SHA::7} in docker-compose.yml"
+          git pull --rebase
+          git push
