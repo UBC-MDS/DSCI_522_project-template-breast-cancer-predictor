@@ -34,9 +34,12 @@ so a file you change there changes on your computer too.
 <details>
 <summary><strong>Once, before your first connection</strong></summary>
 
-1. Make sure you followed the [Usage section of the README](README.md#usage):
+1. Install [Positron](https://positron.posit.co/download.html) on your computer.
+   Its **Remote SSH** feature, which connects to the container, comes built in,
+   so you don't need to install an extension.
+2. Make sure you followed the [Usage section of the README](README.md#usage):
    you have an ssh key at `~/.ssh/id_ed25519.pub` and you ran `docker compose pull`.
-2. Check that Git knows who you are on your computer:
+3. Check that Git knows who you are on your computer:
 
    ``` bash
    git config --global user.email
