@@ -1,0 +1,84 @@
+# Builds the image from your Dockerfile for Intel/AMD and ARM computers,
+# and publishes it on Docker Hub.
+# Save this file as .github/workflows/publish-dockerhub.yml
+
+name: Publish image to Docker Hub
+
+# When the workflow runs
+on:
+  # by hand: Actions tab > Publish image to Docker Hub > Run workflow
+  workflow_dispatch:
+  # on its own: when a push changes one of these files
+  push:
+    paths:
+      - Dockerfile
+      - uv.lock
+      - renv.lock
+      - .github/workflows/publish-dockerhub.yml
+
+env:
+  # Your image: your Docker Hub username / this GitHub repository's name.
+  # Nothing to change here.
+  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/${{ github.event.repository.name }}
+
+jobs:
+  # Job 1: build the image on two computers at the same time,
+  # one Intel/AMD and one ARM, and push one tag from each
+  build:
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-latest     # Intel/AMD
+            arch: amd64
+          - runner: ubuntu-24.04-arm  # ARM
+            arch: arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      # 1. Docker image names must be lowercase, so save a lowercase copy as IMAGE
+      - name: Make the image name lowercase
+        run: echo "IMAGE=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_ENV"
+
+      # 2. Copy your repository onto the computer
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      # 3. Log in to Docker Hub with your two repository secrets
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # 4. Build the image for this computer, tagged for example sha-1a2b3c4-arm64
+      #    (sha- plus the first 7 characters of the commit ID, plus the chip)
+      - name: Build the image
+        run: docker build --tag "$IMAGE:sha-${GITHUB_SHA::7}-${{ matrix.arch }}" .
+
+      # 5. Upload it to Docker Hub
+      - name: Push the image
+        run: docker push "$IMAGE:sha-${GITHUB_SHA::7}-${{ matrix.arch }}"
+
+  # Job 2: after both builds finish, put the two images under one tag,
+  # so each computer downloads the one for its chip
+  combine:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # Docker image names must be lowercase, so save a lowercase copy as IMAGE
+      - name: Make the image name lowercase
+        run: echo "IMAGE=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_ENV"
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Make the tags latest and sha-1a2b3c4, each holding both images
+      - name: Combine the two images under one tag
+        run: |
+          docker buildx imagetools create \
+            --tag "$IMAGE:latest" \
+            --tag "$IMAGE:sha-${GITHUB_SHA::7}" \
+            "$IMAGE:sha-${GITHUB_SHA::7}-amd64" \
+            "$IMAGE:sha-${GITHUB_SHA::7}-arm64"

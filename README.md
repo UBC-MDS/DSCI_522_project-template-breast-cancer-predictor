@@ -40,15 +40,21 @@ physicians.
 ## Report
 
 The final report can be found
-[here](https://ubc-mds.github.io/DSCI_522_project-template-breast-cancer-predictor/reports/breast_cancer_predictor_report.html)
+[here](https://ubc-mds.github.io/DSCI_522_project-template-breast-cancer-predictor/)
 (HTML), or as a
 [PDF](reports/breast_cancer_predictor_report.pdf).
 
 ## Usage
 
+We run the analysis in a Docker container,
+so everyone uses the same software and package versions.
+The image is published on Docker Hub at
+[skysheng7/breast-cancer-predictor-2026](https://hub.docker.com/r/skysheng7/breast-cancer-predictor-2026).
+
+### Setup
+
 First time running the project,
-install [uv](https://docs.astral.sh/uv/getting-started/installation/)
-and [Quarto](https://quarto.org/docs/get-started/),
+install and launch [Docker](https://www.docker.com/get-started/),
 then clone this repository and move into it:
 
 ``` bash
@@ -56,18 +62,32 @@ git clone https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-pre
 cd DSCI_522_project-template-breast-cancer-predictor
 ```
 
-Then run the following from the root of this repository
-to create the virtual environment:
+Run all the commands below from the root of this repository.
+
+### 1. Make an ssh key
+
+If you don't have an ssh key yet, make one
+and press Enter at each question:
 
 ``` bash
-uv sync
+ssh-keygen -t ed25519
 ```
 
-To run the analysis and render the report,
-run the following from the root of this repository:
+The container lets you log in with this key.
+If you skip this step, Docker makes a *folder* named `~/.ssh/id_ed25519.pub` instead,
+and connecting to the container over ssh fails
+until you delete that folder and make the key.
+
+### 2. Download the image
 
 ``` bash
-uv run quarto render
+docker compose pull
+```
+
+### 3. Run the analysis and render the report
+
+``` bash
+docker compose run --rm analysis-env uv run quarto render
 ```
 
 Rendering runs the whole analysis from scratch:
@@ -79,12 +99,53 @@ The rendered report is written to
 `reports/breast_cancer_predictor_report.pdf`,
 replacing the versions in this repository.
 
+### 4. Work in the container
+
+To work on the project in the container, start it with:
+
+``` bash
+docker compose up -d
+```
+
+Then connect to it with Positron over ssh
+(see [Working in a container over ssh with Positron](https://ubc-dsci.github.io/reproducible-and-trustworthy-workflows-for-data-science/lectures/containers-ssh-positron.html)).
+When you are done, stop the container with:
+
+``` bash
+docker compose down
+```
+
+### 5. Update the container
+
+To add or update a package,
+add it with `uv add <package>==<version>`,
+then commit the changed `pyproject.toml` and `uv.lock` together and push them.
+GitHub Actions then builds and publishes a new image on Docker Hub.
+When the workflow finishes,
+change the `sha-` tag on the `image:` line of `docker-compose.yml`
+to the new tag (in a pull request),
+and download the new image with:
+
+``` bash
+docker compose pull
+```
+
+### Publish the report
+
+The report on GitHub Pages is a copy of the rendered report in `docs/index.html`.
+Each time you re-render the report, copy it there again and push:
+
+``` bash
+cp reports/breast_cancer_predictor_report.html docs/index.html
+```
+
 ## Dependencies
 
-- [uv](https://docs.astral.sh/uv/) (version 0.12 or higher)
-- [Quarto](https://quarto.org/) (version 1.10 or higher)
-- Python and packages listed in [`pyproject.toml`](pyproject.toml)
-  (exact versions are locked in [`uv.lock`](uv.lock))
+- [Docker](https://www.docker.com/)
+- The image is built from the [`Dockerfile`](Dockerfile) in this repository.
+  It installs Quarto, uv,
+  and Python with the packages listed in [`pyproject.toml`](pyproject.toml)
+  (exact versions are locked in [`uv.lock`](uv.lock)).
 
 ## AI use statement
 

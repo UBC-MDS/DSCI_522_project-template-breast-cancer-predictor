@@ -1,0 +1,17 @@
+# Adapted from docker-uv-renv by Daniel Chen (MIT License)
+# https://github.com/chendaniely/docker-uv-renv
+
+services:
+  # the service name: `docker compose run analysis-env ...` uses it
+  analysis-env:
+    # CHANGE THIS LINE: your image on Docker Hub,
+    # with the sha- tag your workflow pushed (not latest)
+    image: skysheng7/breast-cancer-predictor-2026:sha-1a2b3c4
+    ports:
+      # 2222 on your computer, 22 (ssh) in the container
+      - "2222:22"
+    volumes:
+      # your project folder, at /workspace in the container
+      - .:/workspace
+      # your ssh public key, so you can log in (ro: read-only)
+      - ~/.ssh/id_ed25519.pub:/root/.ssh/authorized_keys:ro
