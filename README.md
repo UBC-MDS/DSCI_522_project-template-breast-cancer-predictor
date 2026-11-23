@@ -49,7 +49,7 @@ The final report can be found
 We run the analysis in a Docker container,
 so everyone uses the same software and package versions.
 The image is published on Docker Hub at
-[skysheng7/breast-cancer-predictor-2026](https://hub.docker.com/r/skysheng7/breast-cancer-predictor-2026).
+[skysheng7/dsci_522_project-template-breast-cancer-predictor](https://hub.docker.com/r/skysheng7/dsci_522_project-template-breast-cancer-predictor).
 
 ### Setup
 
@@ -98,6 +98,8 @@ The rendered report is written to
 `reports/breast_cancer_predictor_report.html` and
 `reports/breast_cancer_predictor_report.pdf`,
 replacing the versions in this repository.
+Because of `--rm`, the container is removed by itself
+when the render finishes, so there is nothing to stop afterwards.
 
 ## Contributing
 

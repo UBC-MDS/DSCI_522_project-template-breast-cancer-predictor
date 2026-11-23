@@ -4,8 +4,9 @@
 services:
   # the service name: `docker compose run analysis-env ...` uses it
   analysis-env:
-    # CHANGE THIS LINE: your image on Docker Hub,
-    # with the sha- tag your workflow pushed (not latest)
+    # CHANGE THIS LINE once: your Docker Hub username / your GitHub repository's
+    # name in lowercase, with the sha- tag your workflow pushed (not latest).
+    # After that, the workflow updates the tag for you.
     image: skysheng7/dsci_522_project-template-breast-cancer-predictor:sha-6ebd986
     ports:
       # 2222 on your computer, 22 (ssh) in the container

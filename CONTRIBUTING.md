@@ -49,23 +49,26 @@ docker compose run --rm analysis-env uv run quarto render
 
 ### Adding or updating a package
 
-Add the package with `uv add <package>==<version>`
+On a new branch, add the package with `uv add <package>==<version>`
 (this pins the version in `pyproject.toml` and updates `uv.lock`),
 then commit the changed `pyproject.toml` and `uv.lock` together and push them.
-GitHub Actions then builds and publishes a new image on Docker Hub.
+GitHub Actions then builds and publishes a new image on Docker Hub,
+and commits the new `sha-` tag to the `image:` line of `docker-compose.yml`
+on your branch.
 When the workflow finishes,
-change the `sha-` tag on the `image:` line of `docker-compose.yml`
-to the new tag (in a pull request),
-and download the new image with:
+get that commit and download the new image:
 
 ``` bash
+git pull
 docker compose pull
 ```
+
+Then merge the branch into `main` in a pull request.
 
 ### Publishing the report
 
 The report on GitHub Pages is a copy of the rendered report in `docs/index.html`.
-Each time you re-render the report, copy it there again and push:
+Each time you re-render the report, copy it there again, commit and push:
 
 ``` bash
 cp reports/breast_cancer_predictor_report.html docs/index.html
