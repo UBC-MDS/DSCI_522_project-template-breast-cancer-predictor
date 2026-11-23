@@ -74,13 +74,13 @@ so a file you change there changes on your computer too.
 4. Type `root@localhost:2222` and press Enter. A new Positron window opens.
    * If it asks for the platform of the remote host, pick **Linux**.
    * If it asks whether you trust the host (a "fingerprint"), click **Continue**.
-   * The first time, Positron installs its server inside the container. This takes a minute.
+   * The first time, Positron installs its server inside the container. This takes a few minutes (e.g., this takes > 5 minutes on Sky's computer).
 5. **Open the project folder.**
    The bottom left corner now shows `SSH: localhost:2222`,
    but the Explorer says **No folder opened** and the terminal starts in `/root`,
    which has no project files. That is normal.
    * Click **Open Folder** in the Explorer.
-   * Delete what is in the path box at the top of the window, type `/workspace`, and press Enter.
+   * Delete what is in the path box at the top of the window, type `/workspace`, and click "ok" (you may need to click "ok" a few times before this works).
    * The window reloads, and the Explorer shows **WORKSPACE [SSH: LOCALHOST:2222]** with the project files.
 6. **Pick the Python interpreter** (check this every time).
    * Click the interpreter button at the top right of the window.
