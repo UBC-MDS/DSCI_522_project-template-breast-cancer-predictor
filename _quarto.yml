@@ -7,6 +7,15 @@ format:
   html:
     embed-resources: true
     toc: true
+    # link to the PDF in the repository, because GitHub Pages
+    # only has docs/index.html, not the PDF next to it
+    format-links:
+      # naming a format stops Quarto adding its own "Typst" link
+      # (html adds no link, because this page is the html)
+      - html
+      - text: PDF
+        href: https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor/blob/main/reports/breast_cancer_predictor_report.pdf
+        icon: file-pdf
   # PDF via Typst, which comes with Quarto
   typst:
     # png figures for the PDF
