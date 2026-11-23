@@ -2274,7 +2274,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </header>
 
 
-<div id="199b13f2" class="cell" data-execution_count="1">
+<div id="03d69e60" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2309,7 +2309,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <h2 class="anchored" data-anchor-id="data">Data</h2>
 <p>The data set used in this project is of digitized breast cancer image features created by Dr. William H. Wolberg, W. Nick Street, and Olvi L. Mangasarian at the University of Wisconsin, Madison (Street, Wolberg, and Mangasarian 1993). It was sourced from the UCI Machine Learning Repository (Dua and Graff 2017) and can be found <a href="https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)">here</a>. Each row in the data set represents summary statistics from measurements of an image of a tumour sample, including the diagnosis (benign or malignant) and several other measurements (e.g., nucleus texture, perimeter, area, etc.). Diagnosis for each image was conducted by physicians.</p>
 <p>We download the data with code below. The file we download is the archive of the related “Breast Cancer Wisconsin (Original)” entry in the UCI Machine Learning Repository, which bundles several Wisconsin breast cancer data sets together. We only use one file from it, <code>wdbc.data</code>, which is the Diagnostic data set described above. The other files in the archive are saved in <code>data/raw/</code> but are not used in this analysis.</p>
-<div id="506cfb69" class="cell" data-execution_count="2">
+<div id="76c4fafb" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create the data folders if they don&#39;t exist</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (git does not track empty folders)</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>os.makedirs(<span class="st">&quot;../data/raw&quot;</span>, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
@@ -2327,7 +2327,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(<span class="st">&quot;../data/raw/breast+cancer+wisconsin+original.zip&quot;</span>, <span class="st">&#39;r&#39;</span>) <span class="im">as</span> zip_ref:</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall(<span class="st">&quot;../data/raw&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="ab8ca8f1" class="cell" data-execution_count="3">
+<div id="ac74bb3d" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in data</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>colnames <span class="op">=</span> [</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;id&quot;</span>,</span>
@@ -2375,7 +2375,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <section id="analysis" class="level2">
 <h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
 <p>The k-nearest neighbours (k-NN) algorithm was used to build a classification model to predict whether a tumour mass was benign or malignant (found in the class column of the data set). All variables included in the original data set, with the exception of the standard error of fractal dimension, smoothness, symmetry and texture were used to fit the model. Data was split with 70% being partitioned into the training set and 30% being partitioned into the test set. The hyperparameter K (the number of nearest neighbours) was chosen using 30-fold cross validation with the F2 score as the classification metric. Beta was set to 2 for the F2 score so that recall is weighted more heavily than precision when choosing K during hyperparameter tuning, because the application is cancer screening and false negatives are very undesirable in such an application. All variables were standardized just prior to model fitting. The Python programming language (Van Rossum and Drake 2009) and the following Python packages were used to perform the analysis: requests (Reitz 2011), zipfile (Van Rossum and Drake 2009), NumPy (Harris et al. 2020), pandas (McKinney 2010), Altair (VanderPlas et al. 2018) and scikit-learn (Pedregosa et al. 2011). The code used to perform the analysis and create this report can be found here: <a href="https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor" class="uri">https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor</a>.</p>
-<div id="eb54cf2f" class="cell" data-execution_count="4">
+<div id="db275308" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>set_config(transform_output<span class="op">=</span><span class="st">&quot;pandas&quot;</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># split the data into training (70%) and test (30%) sets</span></span>
@@ -2386,7 +2386,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>cancer_train.to_csv(<span class="st">&quot;../data/processed/cancer_train.csv&quot;</span>)</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>cancer_test.to_csv(<span class="st">&quot;../data/processed/cancer_test.csv&quot;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="13f50662" class="cell" data-execution_count="5">
+<div id="5d5533c7" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scale the numeric features, using means and standard deviations</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># learned from the training data only</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>cancer_preprocessor <span class="op">=</span> make_column_transformer(</span>
@@ -2407,7 +2407,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <section id="results-discussion" class="level1">
 <h1>Results &amp; Discussion</h1>
 <p>To look at whether each of the predictors might be useful to predict the tumour class, we plotted the distributions of each predictor from the training data set and coloured the distribution by class (benign: blue and malignant: orange). In doing this we see that class distributions for all of the mean and max predictors for all the measurements overlap somewhat, but do show quite a difference in their centres and spreads. This is less so for the standard error (se) predictors. In particular, the standard errors of fractal dimension, smoothness, symmetry and texture look very similar in both the distribution centre and spread. Thus, we choose to omit these from our model.</p>
-<div id="8fa750ec" class="cell" data-execution_count="6">
+<div id="1265832a" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># melt for plotting via facets</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>cancer_train_melted <span class="op">=</span> scaled_cancer_train.melt(</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    id_vars<span class="op">=</span>[<span class="st">&#39;class&#39;</span>],</span>
@@ -2418,7 +2418,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># make columns names nicer for plotting</span></span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>cancer_train_melted[<span class="st">&#39;predictor&#39;</span>] <span class="op">=</span> cancer_train_melted[<span class="st">&#39;predictor&#39;</span>].<span class="bu">str</span>.replace(<span class="st">&#39;_&#39;</span>,<span class="st">&#39; &#39;</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="9ced94c8" class="cell" data-execution_count="7">
+<div id="f473564c" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># exploratory data analysis - visualize predictor distributions across classes</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>alt.data_transformers.enable(<span class="st">&#39;vegafusion&#39;</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -2444,12 +2444,12 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 <p>Figure 1. Comparison of the empirical distributions of training data predictors between benign and malignant tumour masses.</p>
-<div id="d14afcc2" class="cell" data-execution_count="8">
+<div id="cb7e2996" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># drop se_smoothness, se_symmetry, se_texture, se_fractal_dimension</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>cancer_train <span class="op">=</span> cancer_train.drop(columns<span class="op">=</span>[<span class="st">&quot;se_smoothness&quot;</span>, <span class="st">&quot;se_symmetry&quot;</span>, <span class="st">&quot;se_texture&quot;</span>, <span class="st">&quot;se_fractal_dimension&quot;</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We chose to use a simple classification model using the k-NN algorithm. To find the model that best predicted whether a tumour was benign or malignant, we performed 30-fold cross validation using F2 score (beta = 2) as our metric of model prediction performance to select K (number of nearest neighbours). We observed that the optimal K was 4.</p>
-<div id="d6b481d8" class="cell" data-execution_count="9">
+<div id="ec2e9ad6" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tune model (here, find K for k-NN using 30 fold cv)</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>knn <span class="op">=</span> KNeighborsClassifier()</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>cancer_tune_pipe <span class="op">=</span> make_pipeline(cancer_preprocessor, knn)</span>
@@ -2466,7 +2466,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    scoring<span class="op">=</span>make_scorer(fbeta_score, pos_label<span class="op">=</span><span class="st">&#39;Malignant&#39;</span>, beta<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="6bea6047" class="cell" data-execution_count="10">
+<div id="de47a5e6" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cancer_fit <span class="op">=</span> cancer_tune_grid.fit(</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    cancer_train.drop(columns<span class="op">=</span>[<span class="st">&quot;class&quot;</span>]),</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    cancer_train[<span class="st">&quot;class&quot;</span>]</span>
@@ -2475,7 +2475,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>accuracies_grid <span class="op">=</span> pd.DataFrame(cancer_fit.cv_results_)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Table 1. The 10 values of K with the highest mean F2 score (beta = 2) across the 30 cross-validation folds. The table shows the mean F2 score, its standard error, and the lower and upper bounds of the error bars plotted in Figure 2.</p>
-<div id="06a8fc0d" class="cell" data-execution_count="11">
+<div id="2b717d10" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>accuracies_grid <span class="op">=</span> (</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    accuracies_grid[[</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;param_kneighborsclassifier__n_neighbors&quot;</span>,</span>
@@ -2604,7 +2604,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 </div>
-<div id="6b6fa1eb" class="cell" data-execution_count="12">
+<div id="126093c1" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>line_n_point <span class="op">=</span> alt.Chart(accuracies_grid, width<span class="op">=</span><span class="dv">600</span>).mark_line(color<span class="op">=</span><span class="st">&quot;black&quot;</span>).encode(</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    x<span class="op">=</span>alt.X(<span class="st">&quot;n_neighbors&quot;</span>).title(<span class="st">&quot;Number of neighbours (K)&quot;</span>),</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>alt.Y(<span class="st">&quot;mean_test_score&quot;</span>)</span>
@@ -2629,7 +2629,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 <p>Figure 2. Results from 30-fold cross validation to choose K. F2 score (with beta = 2) was used as the classification metric as K was varied. Points show the mean F2 score across the 30 folds, and error bars show plus and minus one standard error of the mean.</p>
 <p>Table 2. Accuracy and F2 score (beta = 2) of the final model on the test data.</p>
-<div id="9466b774" class="cell" data-execution_count="13">
+<div id="464b90a7" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict on the test data</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cancer_preds <span class="op">=</span> cancer_test.assign(</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    predicted<span class="op">=</span>cancer_fit.predict(cancer_test)</span>
@@ -2680,7 +2680,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 <p>Our prediction model performed quite well on test data, with a final overall accuracy of 0.98 and F2 (beta = 2) score of 0.96 (Table 2). The confusion matrix (Table 3) shows that the model only made 3 mistakes. However, all 3 mistakes were predicting a malignant tumour as benign. These false negatives are the most harmful kind of mistake for implementing this in the clinic, because they could delay treatment for patients who need it.</p>
 <p>Table 3. Confusion matrix of model performance on test data. Rows are the true diagnosis and columns are the diagnosis predicted by the model.</p>
-<div id="6c175898" class="cell" data-execution_count="14">
+<div id="d535bcf2" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>pd.crosstab(</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&quot;class&quot;</span>],</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    cancer_preds[<span class="st">&quot;predicted&quot;</span>],</span>
