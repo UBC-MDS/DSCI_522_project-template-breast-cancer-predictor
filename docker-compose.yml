@@ -16,3 +16,6 @@ services:
       - .:/workspace
       # your ssh public key, so you can log in (ro: read-only)
       - ~/.ssh/id_ed25519.pub:/root/.ssh/authorized_keys:ro
+      # your Git name and email, so your commits in the container count as yours
+      - ~/.gitconfig:/root/.gitconfig:ro
+
