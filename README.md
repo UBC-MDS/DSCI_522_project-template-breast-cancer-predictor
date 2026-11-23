@@ -99,45 +99,10 @@ The rendered report is written to
 `reports/breast_cancer_predictor_report.pdf`,
 replacing the versions in this repository.
 
-### 4. Work in the container
+## Contributing
 
-To work on the project in the container, start it with:
-
-``` bash
-docker compose up -d
-```
-
-Then connect to it with Positron over ssh
-(see [Working in a container over ssh with Positron](https://ubc-dsci.github.io/reproducible-and-trustworthy-workflows-for-data-science/lectures/containers-ssh-positron.html)).
-When you are done, stop the container with:
-
-``` bash
-docker compose down
-```
-
-### 5. Update the container
-
-To add or update a package,
-add it with `uv add <package>==<version>`,
-then commit the changed `pyproject.toml` and `uv.lock` together and push them.
-GitHub Actions then builds and publishes a new image on Docker Hub.
-When the workflow finishes,
-change the `sha-` tag on the `image:` line of `docker-compose.yml`
-to the new tag (in a pull request),
-and download the new image with:
-
-``` bash
-docker compose pull
-```
-
-### Publish the report
-
-The report on GitHub Pages is a copy of the rendered report in `docs/index.html`.
-Each time you re-render the report, copy it there again and push:
-
-``` bash
-cp reports/breast_cancer_predictor_report.html docs/index.html
-```
+Want to change the analysis, add a package, or update the published report?
+See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Dependencies
 

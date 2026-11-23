@@ -19,25 +19,57 @@ bug, create an associated issue and illustrate the bug with a minimal
 
 ### Setting up the project
 
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and
-[Quarto](https://quarto.org/docs/get-started/), then clone the repository and
-create the virtual environment from the root of the repository:
+We develop in the same Docker container that users run the analysis in,
+so everyone uses the same software and package versions.
+First follow the [Usage section of the README](README.md#usage)
+(install Docker, clone the repository, make an ssh key, and download the image).
+Run all the commands below from the root of this repository.
+
+### Working in the container
+
+Start the container with:
 
 ``` bash
-git clone https://github.com/UBC-MDS/DSCI_522_project-template-breast-cancer-predictor.git
-cd DSCI_522_project-template-breast-cancer-predictor
-uv sync
+docker compose up -d
 ```
 
-To re-run the analysis and render the report:
+Then connect to it with Positron over ssh
+(see [Working in a container over ssh with Positron](https://ubc-dsci.github.io/reproducible-and-trustworthy-workflows-for-data-science/lectures/containers-ssh-positron.html)).
+When you are done, stop the container with:
 
 ``` bash
-uv run quarto render
+docker compose down
 ```
 
-If your change needs a new Python package, add it with `uv add <package>`
-(this pins an exact version in `pyproject.toml` and updates `uv.lock`),
-and commit both files.
+To re-run the analysis and render the report without opening the container:
+
+``` bash
+docker compose run --rm analysis-env uv run quarto render
+```
+
+### Adding or updating a package
+
+Add the package with `uv add <package>==<version>`
+(this pins the version in `pyproject.toml` and updates `uv.lock`),
+then commit the changed `pyproject.toml` and `uv.lock` together and push them.
+GitHub Actions then builds and publishes a new image on Docker Hub.
+When the workflow finishes,
+change the `sha-` tag on the `image:` line of `docker-compose.yml`
+to the new tag (in a pull request),
+and download the new image with:
+
+``` bash
+docker compose pull
+```
+
+### Publishing the report
+
+The report on GitHub Pages is a copy of the rendered report in `docs/index.html`.
+Each time you re-render the report, copy it there again and push:
+
+``` bash
+cp reports/breast_cancer_predictor_report.html docs/index.html
+```
 
 ### Pull request process
 
@@ -46,7 +78,8 @@ and commit both files.
 *  Give the branch a short name that describes the work,
    for example `fix-readme-typo` or `add-eda-figure`.
 *  Keep each branch small: one independent piece of work per branch.
-*  Before opening the PR, render the report (`uv run quarto render`)
+*  Before opening the PR, render the report in the container
+   (`docker compose run --rm analysis-env uv run quarto render`)
    to check that the analysis still runs from start to finish.
 *  Open a PR into `main` and describe what changed and why.
    Link the related issue (e.g., "Closes #12").
